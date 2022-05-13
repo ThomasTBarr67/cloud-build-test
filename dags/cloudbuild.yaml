@@ -1,0 +1,11 @@
+steps:
+- name: 'docker.io/library/python:3.7'
+  id: Test
+  entrypoint: /bin/sh
+  args: [-c, 'python -m unittest dags/tests/test_python_scripts.py']
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  id: Deploy
+  entrypoint: bash
+  args: [ '-c', 'gsutil -m rsync -d -r ./dags gs://${_COMPOSER_BUCKET}/dags']
+substitutions:
+    _COMPOSER_BUCKET: us-central1-my-environment-7aa4286b-bucket
